@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/themes/base/css")
+
+</head>
+<body>
+    @Scripts.Render("~/bundles/jquer")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryva")
+    @Scripts.Render("~/bundles/Bootstrap")
+    @RenderSection("scripts", required: false)
+    @RenderBody()
+    <!-- DIALOGO -->
+    <div id="dialogo" style="display:none;"><div class="notify"></div></div>
+
+    <script>
+
+        /**
+	     * Muestra una ventana emergente
+	     * con un mensaje especificado.
+	     * Si se le envía el parametro no_cerrar, no muestra
+	     * boton de cerrar
+	     */
+            function dialogo(title, message, no_cerrar) {
+                var no_cerrar = no_cerrar || false;
+                if (no_cerrar) {
+                    my_buttons = {};
+                    var closeOnEscape = false;
+                } else {
+                    var my_buttons = { "Cerrar": function () { $("#dialogo").dialog("close"); } };
+                    var closeOnEscape = true;
+                }
+                $('.notify').html(message);
+                $("#dialogo").dialog({
+                    autoOpen: true,
+                    width: 400,
+                    title: title,
+                    "position": ['middle', 30],
+                    modal: true,
+                    resizable: false,
+                    closeOnEscape: closeOnEscape,
+                    buttons: my_buttons,
+                    open: function (event, ui) {
+                        if (no_cerrar != null) {
+                            $(".ui-dialog-titlebar-close", ui.dialog).hide();
+                        } else {
+                            $(".ui-dialog-titlebar-close", ui.dialog).show();
+                        }
+                    },
+                    close: function (event, ui) {
+                        $(".ui-dialog-titlebar-close", ui.dialog).show();
+                    }
+                });
+            };
+    </script>
+</body>
+</html>
+
+
