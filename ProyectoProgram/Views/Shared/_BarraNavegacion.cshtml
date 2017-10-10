@@ -2,12 +2,15 @@
 
 <html>
 <head>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/themes/base/css")
-
+    <style>
+        body{
+            padding-top: 60px;
+        }
+    </style>
 </head>
 <body>
     @Scripts.Render("~/bundles/jquer")
@@ -15,6 +18,16 @@
     @Scripts.Render("~/bundles/jqueryva")
     @Scripts.Render("~/bundles/Bootstrap")
     @RenderSection("scripts", required: false)
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav">
+
+            </ul>
+        </div>
+    </nav>
     @RenderBody()
     <!-- DIALOGO -->
     <div id="dialogo" style="display:none;"><div class="notify"></div></div>
@@ -60,5 +73,4 @@
     </script>
 </body>
 </html>
-
 

@@ -25,24 +25,24 @@
 </div>
 <script>
     function Ingresar() {
-       if (!$('#form_login').validate().form()) { return false; }
+       if (!$('#form-login').validate().form()) { return false; }
         $.ajax({
-            url: "@Url.Action("Acceso", "Login")",
+            url: "@Url.Action("Ingresar", "Login")",
             type: "post",
             dataType: "json",
             data: JSON.stringify({
-                Usuario: $("#Usuario").val(),
-                Contrasena : $("#Contrasena").val()
+                usuario: $("#usuario").val(),
+                contrasena : $("#contrasena").val()
             }),
             contentType: 'application/json; charset=utf-8',
             beforeSend: function () {
                 dialogo("Notificación", "Espere...", true);
             },
             success: function (data) {
-                if (data.type) {
-                    window.location.replace("@Url.Action("Index","Principal")");
+                if (data.correcto) {
+                    window.location.replace("@Url.Action("Inicio", "Inicio")");
                 }
-                dialogo("Notificación", data.message);
+                dialogo("Notificación", data.mensaje);
             },
             error: function () {                
                 dialogo("Error", "Error en la función @Url.Action("Acceso", "Login")");

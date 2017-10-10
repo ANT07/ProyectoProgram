@@ -24,7 +24,7 @@ namespace ProyectoProgram.Controllers
 
             var usuarioEncontrado = from u in bds.usuarios where u.NOMBRE == usuario where u.CLAVE == contrasena where u.ESTADO == 1 select u;
 
-            if(usuario.Equals("") && contrasena.Equals(""))
+            if(usuario.Equals("") || contrasena.Equals(""))
             {
                 correcto = false;
                 mensaje = "Completar Informacion";
