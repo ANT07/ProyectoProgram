@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SistemaContableModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SistemaContableModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="iu_menu">
           <Key>
             <PropertyRef Name="ID_MENU" />
@@ -107,6 +107,29 @@
         <EntityType Name="usuario">
           <Key>
             <PropertyRef Name="ID_USUARIO" />
+          </Key>
+          <Property Name="ID_USUARIO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
+          <Property Name="CLAVE" Type="varchar" MaxLength="30" />
+          <Property Name="ID_ROL" Type="int" Nullable="false" />
+          <Property Name="NOMBRE_COMPLETO" Type="varchar" MaxLength="100" />
+          <Property Name="ESTADO" Type="tinyint" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaRoles' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VistaRoles">
+          <Key>
+            <PropertyRef Name="ID_ROL" />
+          </Key>
+          <Property Name="ID_ROL" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROL" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VistaUsuarios">
+          <Key>
+            <PropertyRef Name="ID_USUARIO" />
+            <PropertyRef Name="ID_ROL" />
           </Key>
           <Property Name="ID_USUARIO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NOMBRE" Type="varchar" MaxLength="30" />
@@ -263,6 +286,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="menus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="opciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="menu" Type="varchar" Mode="In" />
+          <Parameter Name="usuario" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="SistemaContableModelStoreContainer">
           <EntitySet Name="iu_menu" EntityType="Self.iu_menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="iu_opcion" EntityType="Self.iu_opcion" Schema="dbo" store:Type="Tables" />
@@ -275,6 +303,22 @@
           <EntitySet Name="tblmaestropartida" EntityType="Self.tblmaestropartida" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbltipocuenta" EntityType="Self.tbltipocuenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VistaRoles" EntityType="Self.VistaRoles" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VistaRoles].[ID_ROL] AS [ID_ROL], 
+    [VistaRoles].[ROL] AS [ROL]
+    FROM [dbo].[VistaRoles] AS [VistaRoles]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VistaUsuarios" EntityType="Self.VistaUsuarios" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VistaUsuarios].[ID_USUARIO] AS [ID_USUARIO], 
+    [VistaUsuarios].[NOMBRE] AS [NOMBRE], 
+    [VistaUsuarios].[CLAVE] AS [CLAVE], 
+    [VistaUsuarios].[ID_ROL] AS [ID_ROL], 
+    [VistaUsuarios].[NOMBRE_COMPLETO] AS [NOMBRE_COMPLETO], 
+    [VistaUsuarios].[ESTADO] AS [ESTADO]
+    FROM [dbo].[VistaUsuarios] AS [VistaUsuarios]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_iu_opcion_iu_menu" Association="Self.FK_iu_opcion_iu_menu">
             <End Role="iu_menu" EntitySet="iu_menu" />
             <End Role="iu_opcion" EntitySet="iu_opcion" />
@@ -324,8 +368,7 @@
             <End Role="usuario" EntitySet="usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SistemaContableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -611,7 +654,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SistemaContableEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SistemaContableEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="iu_menu" EntityType="Self.iu_menu" />
           <EntitySet Name="iu_opcion" EntityType="Self.iu_opcion" />
           <EntitySet Name="iu_rol" EntityType="Self.iu_rol" />
@@ -671,13 +714,47 @@
             <End Role="usuario" EntitySet="usuarios" />
             <End Role="tblmaestropartida" EntitySet="tblmaestropartidas" />
           </AssociationSet>
+          <FunctionImport Name="menus" ReturnType="Collection(String)" />
+          <FunctionImport Name="opciones" ReturnType="Collection(SistemaContableModel.opciones_Result)">
+            <Parameter Name="menu" Mode="In" Type="String" />
+            <Parameter Name="usuario" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="VistaUsuarios" EntityType="SistemaContableModel.VistaUsuario" />
+          <EntitySet Name="VistaRoles" EntityType="SistemaContableModel.VistaRole" />
         </EntityContainer>
+        <ComplexType Name="opciones_Result">
+          <Property Type="String" Name="OPCION" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="url" Nullable="true" MaxLength="300" />
+          <Property Type="Byte" Name="ACCESO" Nullable="true" />
+          <Property Type="Byte" Name="AGREGAR" Nullable="true" />
+          <Property Type="Byte" Name="ELIMINAR" Nullable="true" />
+          <Property Type="Byte" Name="MODIFICAR" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="VistaUsuario">
+          <Key>
+            <PropertyRef Name="ID_USUARIO" />
+            <PropertyRef Name="ID_ROL" />
+          </Key>
+          <Property Name="ID_USUARIO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CLAVE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ID_ROL" Type="Int32" Nullable="false" />
+          <Property Name="NOMBRE_COMPLETO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ESTADO" Type="Byte" />
+        </EntityType>
+        <EntityType Name="VistaRole">
+          <Key>
+            <PropertyRef Name="ID_ROL" />
+          </Key>
+          <Property Name="ID_ROL" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROL" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SistemaContableModelStoreContainer" CdmEntityContainer="SistemaContableEntities">
+        <EntityContainerMapping StorageEntityContainer="SistemaContableModelStoreContainer" CdmEntityContainer="SistemaContableEntities1">
           <EntitySetMapping Name="iu_menu">
             <EntityTypeMapping TypeName="SistemaContableModel.iu_menu">
               <MappingFragment StoreEntitySet="iu_menu">
@@ -793,6 +870,39 @@
                 <ScalarProperty Name="ID_ROL" ColumnName="ID_ROL" />
                 <ScalarProperty Name="NOMBRE_COMPLETO" ColumnName="NOMBRE_COMPLETO" />
                 <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="menus" FunctionName="SistemaContableModel.Store.menus" />
+          <FunctionImportMapping FunctionImportName="opciones" FunctionName="SistemaContableModel.Store.opciones">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SistemaContableModel.opciones_Result">
+                <ScalarProperty Name="OPCION" ColumnName="OPCION" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="ACCESO" ColumnName="ACCESO" />
+                <ScalarProperty Name="AGREGAR" ColumnName="AGREGAR" />
+                <ScalarProperty Name="ELIMINAR" ColumnName="ELIMINAR" />
+                <ScalarProperty Name="MODIFICAR" ColumnName="MODIFICAR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="VistaUsuarios">
+            <EntityTypeMapping TypeName="SistemaContableModel.VistaUsuario">
+              <MappingFragment StoreEntitySet="VistaUsuarios">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="NOMBRE_COMPLETO" ColumnName="NOMBRE_COMPLETO" />
+                <ScalarProperty Name="ID_ROL" ColumnName="ID_ROL" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VistaRoles">
+            <EntityTypeMapping TypeName="SistemaContableModel.VistaRole">
+              <MappingFragment StoreEntitySet="VistaRoles">
+                <ScalarProperty Name="ROL" ColumnName="ROL" />
+                <ScalarProperty Name="ID_ROL" ColumnName="ID_ROL" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

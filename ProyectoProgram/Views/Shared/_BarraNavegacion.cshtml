@@ -13,9 +13,9 @@
     </style>
 </head>
 <body>
-    @Scripts.Render("~/bundles/jquer")
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/jqueryva")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/Bootstrap")
     @RenderSection("scripts", required: false)
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -23,7 +23,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">WebSiteName</a>
             </div>
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav" id="menus">
 
             </ul>
         </div>
@@ -33,6 +33,7 @@
     <div id="dialogo" style="display:none;"><div class="notify"></div></div>
 
     <script>
+
 
         /**
 	     * Muestra una ventana emergente
@@ -70,7 +71,77 @@
                     }
                 });
             };
+
+        $(document).on("ready", function () {
+            GetMenu();
+        });
+
+        function GetMenu() {
+            var table = $("#menus");
+            var f = "";
+            $.ajax({
+                url: "@Url.Action("getMenu", "Inicio")",
+                type: "post",
+            dataType: "json",
+            beforeSend: function () {
+                
+            },
+            success: function (data) {
+                table.empty();
+                $.each(data, function (k, v) {
+                    if (data) {
+                        f += "<li class='dropdown'>";
+                        f += "<a href='#' class='dropdown-toggle' data-toggle='dropdown' type='button'>";
+                        f += v.menu+" ";
+                        f+= "<span class='caret'></span>"
+                        f += "</a>";
+                        f += "<ol class='dropdown-menu' id='"+v.menu+"'>";
+                        f += "</ol>"
+                        f += "</li>";
+                        table.append(f);
+                        getOpciones(v.menu);
+                        f = "";
+                    }
+                });
+            },
+            error: function (x,y,z) {
+                dialogo("Error", "Error en la función @Url.Action("getMenu", "Inicio")" + x.responseText + " " + y + " " + z);
+            }
+        });
+        }
+
+        function getOpciones(ME){
+            var e = "";
+            var lista = $("#" + ME + "");
+            $.ajax({
+                url : "@Url.Action("GetOpciones", "Inicio")",
+                type: "post",
+                dataType : "json",
+                data: JSON.stringify({
+                    menu: ME
+                }),
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function () {
+                },
+                success : function (data){
+                    lista.empty();
+                    $.each(data,function(k,v){
+                        if(data){
+                            e += "<li><a href='#'>"+v.opcion+"</a></li>";
+                            lista.append(e);
+                            e = "";
+                        }
+                    });
+                },
+                error : function(x,y,z){
+                    dialogo("Error", "Error en la función @Url.Action("GetOpciones", "Inicio")" + x.responseText + " " + y + " " + z);
+                }
+            });
+        }
     </script>
+
+
+
 </body>
 </html>
 

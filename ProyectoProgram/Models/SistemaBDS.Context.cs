@@ -12,11 +12,13 @@ namespace ProyectoProgram.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
-    public partial class SistemaContableEntities : DbContext
+    public partial class SistemaContableEntities1 : DbContext
     {
-        public SistemaContableEntities()
-            : base("name=SistemaContableEntities")
+        public SistemaContableEntities1()
+            : base("name=SistemaContableEntities1")
         {
         }
     
@@ -36,5 +38,25 @@ namespace ProyectoProgram.Models
         public virtual DbSet<tblmaestropartida> tblmaestropartidas { get; set; }
         public virtual DbSet<tbltipocuenta> tbltipocuentas { get; set; }
         public virtual DbSet<usuario> usuarios { get; set; }
+        public virtual DbSet<VistaUsuario> VistaUsuarios { get; set; }
+        public virtual DbSet<VistaRole> VistaRoles { get; set; }
+    
+        public virtual ObjectResult<string> menus()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("menus");
+        }
+    
+        public virtual ObjectResult<opciones_Result> opciones(string menu, string usuario)
+        {
+            var menuParameter = menu != null ?
+                new ObjectParameter("menu", menu) :
+                new ObjectParameter("menu", typeof(string));
+    
+            var usuarioParameter = usuario != null ?
+                new ObjectParameter("usuario", usuario) :
+                new ObjectParameter("usuario", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<opciones_Result>("opciones", menuParameter, usuarioParameter);
+        }
     }
 }

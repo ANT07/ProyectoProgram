@@ -51,6 +51,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -190,27 +191,30 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\iu_menu.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\iu_opcion.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\iu_rol.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\iu_rol_menu.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Model1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
+    <Compile Include="Models\opciones_Result.cs">
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.cs">
+    <Compile Include="Models\SistemaBDS.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SistemaBDS.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SistemaBDS.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -218,25 +222,31 @@
       <DependentUpon>SistemaBDS.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblcuenta.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblcuentaNivel.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbldetallepartida.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblmaestropartida.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbltipocuenta.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\usuario.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VistaRole.cs">
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VistaUsuario.cs">
+      <DependentUpon>SistemaBDS.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -307,15 +317,15 @@
       <DependentUpon>SistemaBDS.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
-    <Content Include="Models\Model1.Context.tt">
+    <Content Include="Models\SistemaBDS.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SistemaBDS.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+      <LastGenOutput>SistemaBDS.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Model1.tt">
+    <Content Include="Models\SistemaBDS.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SistemaBDS.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
+      <LastGenOutput>SistemaBDS.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c17c7d05b26d490e83adc3087f0f7149" Name="Diagram1">
+      <Diagram DiagramId="a72b973985ab4bba9932fdff4bc5279a" Name="Diagram1">
         <EntityTypeShape EntityType="SistemaContableModel.iu_menu" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaContableModel.iu_opcion" Width="1.5" PointX="5.25" PointY="10.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaContableModel.iu_rol" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
@@ -28,6 +28,8 @@
         <AssociationConnector Association="SistemaContableModel.FK_tbldetallepartida_tblcuenta" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaContableModel.FK_TBLDETAL_RELATIONS_TBLMAEST" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaContableModel.FK_tblmaestropartida_usuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SistemaContableModel.VistaUsuario" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SistemaContableModel.VistaRole" Width="1.5" PointX="0.75" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

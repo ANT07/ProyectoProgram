@@ -10,7 +10,7 @@ namespace ProyectoProgram.Controllers
     public class LoginController : Controller
     {
         // GET: Login
-        private SistemaContableEntities bds = new SistemaContableEntities();
+        private SistemaContableEntities1 bds = new SistemaContableEntities1();
         public ActionResult Index()
         {
             return View();
