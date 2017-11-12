@@ -25,18 +25,17 @@ namespace ProyectoProgram.Models
         public int IDNIVEL { get; set; }
         public string NOMBRECUENTA { get; set; }
         public string NUMEROCUENTA { get; set; }
-        public int ID_USUARIO { get; set; }
         public Nullable<int> TBL_IDNIVEL { get; set; }
         public string TBL_NUMEROCUENTA { get; set; }
         public Nullable<long> IDTIPO { get; set; }
-        public int MAYOR { get; set; }
+        public Nullable<int> MAYOR { get; set; }
+        public Nullable<int> RESUMEN { get; set; }
     
         public virtual tblcuentaNivel tblcuentaNivel { get; set; }
         public virtual tbltipocuenta tbltipocuenta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblcuenta> tblcuenta1 { get; set; }
         public virtual tblcuenta tblcuenta2 { get; set; }
-        public virtual usuario usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbldetallepartida> tbldetallepartidas { get; set; }
     }

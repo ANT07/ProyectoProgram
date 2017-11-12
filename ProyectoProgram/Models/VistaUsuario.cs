@@ -15,10 +15,10 @@ namespace ProyectoProgram.Models
     public partial class VistaUsuario
     {
         public int ID_USUARIO { get; set; }
-        public string NOMBRE { get; set; }
-        public string CLAVE { get; set; }
         public int ID_ROL { get; set; }
+        public string NOMBRE { get; set; }
         public string NOMBRE_COMPLETO { get; set; }
-        public Nullable<byte> ESTADO { get; set; }
+        public string ROL { get; set; }
+        public string ESTADO { get; set; }
     }
 }

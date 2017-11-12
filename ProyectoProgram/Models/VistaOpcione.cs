@@ -10,15 +10,14 @@
 namespace ProyectoProgram.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class opciones_Result
+    public partial class VistaOpcione
     {
-        public string OPCION { get; set; }
+        public int ID_OPCION { get; set; }
+        public string opcion { get; set; }
+        public string MENU { get; set; }
         public string VISTA { get; set; }
         public string CONTROLADOR { get; set; }
-        public Nullable<byte> ACCESO { get; set; }
-        public Nullable<byte> AGREGAR { get; set; }
-        public Nullable<byte> ELIMINAR { get; set; }
-        public Nullable<byte> MODIFICAR { get; set; }
     }
 }

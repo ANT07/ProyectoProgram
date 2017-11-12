@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "Rol";
+    Layout = "~/Views/Shared/_BarraNavegacion.cshtml";
+}
+
+<div style="display: none;">
+    <form id="rol">
+        <div class="form-group">
+            <input id="rolEliminar" type="hidden" value="" />
+            <label>Nombre del ROl: </label>
+            <input type="text" id="nombreRol" required class="form-control" />
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <button class="btn btn-success" onclick="Preparar()"><span class="glyphicon glyphicon-plus"></span> Rol</button><br /><br />
+    <div  class="center-block" style="width : 50%;">
+        <table class="table table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ROL</th>
+                    <th>ACCIONES </th>
+                </tr>
+            </thead>
+            <tbody id="registros"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="cuadroeliminar" style="display: none;">
+    <h4>Eliminar Usuario?</h4>
+</div>
+<script>
+    $(document).on("ready",function(){
+        GetRoles();
+    })
+
+    function GetRoles(){
+        var table = $("#registros");
+        var f = "";
+        $.ajax({
+            url: "@Url.Action("GetRoles", "Rol")",
+            type: "post",
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            table.empty();
+            $.each(data, function (k, v) {
+                if (data) {
+                    f += "<tr>";
+                    f += "<td>"+v.ROL+"</td>";
+                    f += "<td>";
+                    f += "<i class='glyphicon glyphicon-pencil' style='cursor:pointer' onclick='Preparar(" + v.ID_ROL + ")'></i>";
+                    f += "&nbsp;"
+                    f += "<i class='glyphicon glyphicon-remove' style='cursor:pointer' onclick='AbrirELiminar(" + v.ID_ROL+ ")'></i>";
+                    f += "</td>";
+                    f += "</tr>";
+                }
+            });
+            table.append(f);
+        },
+        error: function () {
+            dialogo("Error", "Error en la función @Url.Action("GetRoles", "Rol")");
+        }
+    });
+    }
+
+    function Preparar(ID) {
+        $("#rol")[0].reset();
+        var ID = ID || 0;
+        if (ID != 0) {
+            $.ajax({
+                url: "@Url.Action("GetRol", "Rol")",
+                type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                idrol : ID
+            }),
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: function () {
+                dialogo("Notificación", "Espere...");
+            },
+            success: function (data) {
+                if (data) {
+                    $("#nombreRol").val(data.ROL);
+                    jQuery("#dialogo").dialog("close");
+                    Abrir(ID);
+                }
+            },
+            error: function () {
+                dialogo("Error", "Error en la función @Url.Action("GetRoles", "Rol")");
+            }
+        });
+    } else {
+            Abrir(ID);
+    }
+    }
+
+    function Abrir(ID) {
+        var accion = ID == 0 ? "Nuevo" : "Editar";
+        $("#rol").dialog({
+            autoOpen: true,
+            width: 650,
+            title: accion,
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Guardar": function () {
+                    AgregarRol(ID);
+                },
+                "Cancelar": function () {
+                    $("#rol").dialog("close");
+                }
+            },
+            open: function () { },
+            close: function () { }
+        });
+    }
+
+    function AgregarRol(ID) {
+        $.ajax({
+            url : "@Url.Action("AgregarRol","Rol")",
+            type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                idrol : ID,
+                rol : $("#nombreRol").val()
+            }),
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: function () {
+                dialogo("Notificacion"," Espere...",true);
+            },
+            success: function (data) {
+                jQuery("#rol").dialog("close");
+                if (data.correcto) {
+                    GetRoles();
+                }
+                setTimeout(function () {
+                    dialogo("Notificación", data.mensaje);
+                }, 1000);
+            },
+            error: function () {
+                dialogo("Error", "Error en la Funcion @Url.Action("AgregarRol", "Rol")",false);
+            }
+        });
+    }
+
+    function AbrirELiminar(ID) {
+        $("#rolEliminar").val(ID);
+        $("#cuadroeliminar").dialog({
+            autoOpen: true,
+            width: 650,
+            title: "Eliminar Registro",
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Eliminar": function () {
+                    Eliminar($("#rolEliminar").val());
+                },
+                "Cancelar": function () {
+                    $("#cuadroeliminar").dialog("close");
+                }
+            },
+            open: function () { },
+            close: function () { }
+        });
+    };
+
+    function Eliminar(ID) {
+        $.ajax({
+            url: "@Url.Action("EliminarRol", "Rol")",
+            type: "post",
+        dataType: "json",
+        data: JSON.stringify({
+            idrol: ID
+        }),
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: function () {
+            dialogo("Notificación", "Espere...",true);
+        },
+        success: function (data) {
+            if (data.correcto) {
+                GetRoles();
+            }
+            setTimeout(function () {
+                jQuery("#cuadroeliminar").dialog("close");
+                dialogo("Notificación", data.mensaje);
+            }, 1000);
+        },
+        error: function () {
+            dialogo("Error", "Error en la función @Url.Action("EliminarRol", "Rol")");
+        }
+    });
+    }
+
+</script>

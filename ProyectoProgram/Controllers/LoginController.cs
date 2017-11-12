@@ -9,8 +9,8 @@ namespace ProyectoProgram.Controllers
 {
     public class LoginController : Controller
     {
-        // GET: Login
-        private SistemaContableEntities1 bds = new SistemaContableEntities1();
+        // GET: Logi
+        private SistemaContableEntities10 bds = new SistemaContableEntities10();
         public ActionResult Index()
         {
             return View();
@@ -22,7 +22,7 @@ namespace ProyectoProgram.Controllers
             string mensaje = "";
             List<Object> respuesta = new List<object>();
 
-            var usuarioEncontrado = from u in bds.usuarios where u.NOMBRE == usuario where u.CLAVE == contrasena where u.ESTADO == 1 select u;
+            var usuarioEncontrado = from u in bds.usuarios where u.NOMBRE == usuario & u.CLAVE == contrasena where u.ESTADO == 1 select u;
 
             if(usuario.Equals("") || contrasena.Equals(""))
             {
@@ -45,5 +45,7 @@ namespace ProyectoProgram.Controllers
 
             return Json(respuesta.First(),JsonRequestBehavior.AllowGet);
         }
+
+
     }
 }

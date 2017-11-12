@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -21,26 +20,120 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">WebSiteName</a>
+                <button  class="navbar-toggle collapsed" data-toggle="collapse" data-target="#desplegar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#" id="usuarioActivo"><span class="glyphicon glyphicon-user"></span></a>
             </div>
-            <ul class="nav navbar-nav" id="menus">
-
-            </ul>
+            <div class="navbar-collapse collapse" id="desplegar">
+                <ul class="nav navbar-nav" id="menus"></ul>
+            </div>
         </div>
     </nav>
-    @RenderBody()
+
     <!-- DIALOGO -->
     <div id="dialogo" style="display:none;"><div class="notify"></div></div>
 
     <script>
+        $(document).on("ready", function () {
+            @{
+                if (Session["usuario"] == null)
+                {
+                    Response.Redirect("http://localhost:63017/Login/Index");
+                }
+               /*else
+                {
+                    Response.Write("$('#usuarioActivo').append('"+Session["usuario"].ToString()+"')");
+                }*/
+            }
+                GetMenu();
+            });
+
+        function llenarSelectMenus() {
+            var selectMenus = $("#menuslista");
+            var e = "";
+            $.ajax({
+                url: "@Url.Action("GetMenus", "Menu")",
+                type: "post",
+                dataType: "json",
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+                    selectMenus.empty();
+                    $.each(data, function (k, v) {
+                        if (data) {
+                            e += "<option value='" + v.ID_MENU + "'>";
+                            e += v.MENU;
+                            e += "</option>";
+                        }
+                    });
+                    selectMenus.append(e);
+                },
+                erorr: function (x, y, z) {
+                    dialogo(x.responseText);
+                }
+            });
+        }
+
+        function llenarOpciones() {
+            var selectOpciones = $("#menusopcion");
+            var e = "";
+            $.ajax({
+                url : "@Url.Action("GetOPciones", "Opcion")",
+                type : "post",
+            dataType : "json",
+            beforeSend : function (){
+
+            },
+            success : function (data){
+                selectOpciones.empty();
+                $.each(data,function(k,v){
+                    if(data){
+                        e += "<option value='"+v.ID_OPCION+"'>";
+                        e += v.opcion;
+                        e += "</option>";
+                    }
+                });
+                selectOpciones.append(e);
+            },
+            erorr: function (x, y, z) {
+                dialogo(x.responseText);
+            }
+        });
+        }
+
+        function llenarRoles() {
+                    var selectRoles = $("#roles");
+                    var e = "";
+                    $.ajax({
+                        url : "@Url.Action("getRoles", "Inicio")",
+                        type : "post",
+                    dataType : "json",
+                    beforeSend : function (){
+
+                    },
+                    success : function (data){
+                        selectRoles.empty();
+                        $.each(data,function(k,v){
+                            if(data){
+                                e += "<option value='"+v.ID_ROL+"'>";
+                                e += v.ROL;
+                                e += "</option>";
+                            }
+                        });
+                        selectRoles.append(e);
+                    },
+                    erorr: function (x, y, z) {
+                        dialogo(x.responseText);
+                    }
+                });
+        }
 
 
-        /**
-	     * Muestra una ventana emergente
-	     * con un mensaje especificado.
-	     * Si se le envía el parametro no_cerrar, no muestra
-	     * boton de cerrar
-	     */
+
             function dialogo(title, message, no_cerrar) {
                 var no_cerrar = no_cerrar || false;
                 if (no_cerrar) {
@@ -70,11 +163,8 @@
                         $(".ui-dialog-titlebar-close", ui.dialog).show();
                     }
                 });
-            };
+            }
 
-        $(document).on("ready", function () {
-            GetMenu();
-        });
 
         function GetMenu() {
             var table = $("#menus");
@@ -84,7 +174,7 @@
                 type: "post",
             dataType: "json",
             beforeSend: function () {
-                
+
             },
             success: function (data) {
                 table.empty();
@@ -92,7 +182,7 @@
                     if (data) {
                         f += "<li class='dropdown'>";
                         f += "<a href='#' class='dropdown-toggle' data-toggle='dropdown' type='button'>";
-                        f += v.menu+" ";
+                        f += "<span class='"+v.icono+"'></span> "+v.menu+" ";
                         f+= "<span class='caret'></span>"
                         f += "</a>";
                         f += "<ol class='dropdown-menu' id='"+v.menu+"'>";
@@ -126,8 +216,8 @@
                 success : function (data){
                     lista.empty();
                     $.each(data,function(k,v){
-                        if(data){
-                            e += "<li><a href='#'>"+v.opcion+"</a></li>";
+                        if (data) {
+                            e += "<li><a href='http://localhost:63017/" + v.vista + "/" + v.controlador + "'>" + v.opcion + "</a></li>";
                             lista.append(e);
                             e = "";
                         }
@@ -138,8 +228,11 @@
                 }
             });
         }
+
     </script>
 
+    @RenderBody()
+    
 
 
 </body>

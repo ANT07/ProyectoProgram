@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "Opcion";
+    Layout = "~/Views/Shared/_BarraNavegacion.cshtml";
+}
+
+<div style="display: none;">
+    <form id="rol">
+        <div class="form-group">
+            <input id="opcionEliminar" type="hidden" value="" />
+            <label>Nombre de la Opcion: </label>
+            <input type="text" id="nombreOpcion" required class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Vista: </label>
+            <input type="text" id="nombreVista" required class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Controlador: </label>
+            <input type="text" id="nombreControlador" required class="form-control" />
+        </div>
+        <div class="form-group">
+             <label>Menu</label>
+            <select id="menuslista" class="form-control"></select>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <button class="btn btn-success" onclick="Preparar()"><span class="glyphicon glyphicon-plus"></span> Opcion</button><br /><br />
+       <table class="table table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>OPCION</th>
+                    <th>MENU</th>
+                    <th>VISTA A MOSTRAR</th>
+                    <th>CONTROLADOR DE FUNCIONES</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody id="registros"></tbody>
+        </table>
+</div>
+
+<div id="cuadroeliminar" style="display: none;">
+    <h4>Eliminar Opcion?</h4>
+</div>
+
+<script>
+    $(document).on("ready",function(){
+        GetOpciones();
+        llenarSelectMenus();
+        llenarRoles();
+    })
+
+    function GetOpciones(){
+        var table = $("#registros");
+        var f = "";
+        $.ajax({
+            url: "@Url.Action("GetOpciones", "Opcion")",
+            type: "post",
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            table.empty();
+            $.each(data, function (k, v) {
+                if (data) {
+                    f += "<tr>";
+                    f += "<td>" + v.opcion + "</td>";
+                    f += "<td>" + v.MENU + "</td>";
+                    f += "<td>" + v.VISTA + "</td>";
+                    f += "<td>" + v.CONTROLADOR + "</td>";
+                    f += "<td>";
+                    f += "<i class='glyphicon glyphicon-pencil' style='cursor:pointer' onclick='Preparar(" + v.ID_OPCION + ")'></i>";
+                    f += "&nbsp;"
+                    f += "<i class='glyphicon glyphicon-remove' style='cursor:pointer' onclick='AbrirELiminar(" + v.ID_OPCION + ")'></i>";
+                    f += "</td>";
+                    f += "</tr>";
+                }
+            });
+            table.append(f);
+        },
+        error: function () {
+            dialogo("Error", "Error en la función @Url.Action("GetOpciones", "Opcion")");
+        }
+    });
+    }
+
+    function Preparar(OPCION) {
+        $("#rol")[0].reset();
+        var IDOP = OPCION || 0;
+        if (IDOP != 0) {
+            $.ajax({
+                url: "@Url.Action("GetOpcion", "Opcion")",
+                type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                opc: IDOP
+            }),
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: function () {
+                dialogo("Notificación", "Espere...");
+            },
+            success: function (data) {
+                if (data) {
+                    $("#nombreOpcion").val(data.OPCION);
+                    $("#nombreVista").val(data.VISTA);
+                    $("#nombreControlador").val(data.CONTROLADOR);
+                    var menus = $("select#menuslista option");
+                    for (var i = 0; i < menus.length; i++) {
+                        if (menus[i].value == data.ID_MENU) {
+                            menus[i].setAttribute("selected","true");
+                        }
+                    }
+
+                    jQuery("#dialogo").dialog("close");
+                    Abrir(OPCION);
+                }
+            },
+            error: function () {
+                dialogo("Error", "Error en la función @Url.Action("GetOpcion", "Opcion")");
+            }
+        });
+    } else {
+            Abrir(IDOP);
+    }
+    }
+
+    function Abrir(OPCION) {
+        var accion = OPCION == 0 ? "Nuevo" : "Editar";
+        $("#rol").dialog({
+            autoOpen: true,
+            width: 650,
+            title: accion,
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Guardar": function () {
+                    AgregarOpcion(OPCION);
+                },
+                "Cancelar": function () {
+                    $("#rol").dialog("close");
+                }
+            },
+            open: function () { },
+            close: function () { }
+        });
+    }
+
+    function AgregarOpcion(OPCION) {
+        $.ajax({
+            url : "@Url.Action("AgregarOpcion","Opcion")",
+            type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                idopcion: OPCION ,
+                opcion: $("#nombreOpcion").val(),
+                vista: $("#nombreVista").val(),
+                controlador: $("#nombreControlador").val(),
+                menu: $("#menuslista").val(),
+            }),
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: function () {
+                dialogo("Notificacion"," Espere...",true);
+            },
+            success: function (data) {
+                jQuery("#rol").dialog("close");
+                if (data.correcto) {
+                    GetOpciones();
+                }
+                setTimeout(function () {
+                    dialogo("Notificación", data.mensaje);
+                }, 1000);
+            },
+            error: function () {
+                dialogo("Error", "Error en la Funcion @Url.Action("AgregarOpciones", "Opcion")",false);
+            }
+        });
+    }
+
+    function AbrirELiminar(OPCION) {
+        $("#opcionEliminar").val(OPCION);
+        $("#cuadroeliminar").dialog({
+            autoOpen: true,
+            width: 650,
+            title: "Eliminar Registro",
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Eliminar": function () {
+                    Eliminar($("#opcionEliminar").val(), $("#rolEliminar").val());
+                },
+                "Cancelar": function () {
+                    $("#cuadroeliminar").dialog("close");
+                }
+            },
+            open: function () { },
+            close: function () { }
+        });
+    };
+
+    function Eliminar(OPCION) {
+        $.ajax({
+            url: "@Url.Action("EliminarOpcion", "Opcion")",
+            type: "post",
+        dataType: "json",
+        data: JSON.stringify({
+            opcion: OPCION
+        }),
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: function () {
+            dialogo("Notificación", "Espere...",true);
+        },
+        success: function (data) {
+            if (data.correcto) {
+                GetOpciones();
+            }
+            setTimeout(function () {
+                jQuery("#cuadroeliminar").dialog("close");
+                dialogo("Notificación", data.mensaje);
+            }, 1000);
+        },
+        error: function () {
+            dialogo("Error", "Error en la función @Url.Action("EliminarRol", "Rol")");
+        }
+    });
+    }
+
+</script>

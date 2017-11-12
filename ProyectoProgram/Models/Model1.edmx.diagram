@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3a0d6f4daec94696a1875f525cd3ec64" Name="Diagram1">
+        <EntityTypeShape EntityType="SistemaContableModel.iu_menu" Width="1.5" PointX="1.5" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.iu_opcion" Width="1.5" PointX="1.5" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.iu_rol" Width="1.5" PointX="1.5" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.iu_rol_menu" Width="1.5" PointX="3.75" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.sysdiagram" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.tblcuenta" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.tblcuentaNivel" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.tbldetallepartida" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.tblmaestropartida" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.tbltipocuenta" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.usuario" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.GetPrivilegio" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.usuario1" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.VistaMenu" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.VistaOpcione" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.VistaRole" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaContableModel.VistaUsuario" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="SistemaContableModel.FK_iu_opcion_iu_menu" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_iu_rol_menu_iu_opcion" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_iu_rol_menu_iu_rol" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_usuario_iu_rol" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_TBLCUENT_1_TBLCUENT" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_TBLCUENT_RELATIONS_TBLTIPOC" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblcuenta_tblcuenta" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_tbldetallepartida_tblcuenta" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_TBLDETAL_RELATIONS_TBLMAEST" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblmaestropartida_usuario" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

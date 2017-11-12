@@ -7,16 +7,17 @@
 <div style="display: none;">
     <form id="usuario">
         <div class="form-group">
+            <input type="hidden" id="usuarioeliminar" value="" />
             <label>Usuario: </label>
-            <input type="text" id="usuario" required class="form-control"/>
+            <input type="text" id="campousuario" required class="form-control" />
         </div>
         <div class="form-group">
             <label>Nombre Completo: </label>
-            <input type="text" id="nombrecompleto" required class="form-control"/>
+            <input type="text" id="nombrecompleto" required class="form-control" />
         </div>
         <div class="form-group">
-            <label>Usuario: </label>
-            <input type="password"id="contraseña" required class="form-control"/>
+            <label>Nueva Contraseña: </label>
+            <input type="password" id="contrasena" required class="form-control" />
         </div>
         <div class="form-group">
             <label>Rol de Usuario</label>
@@ -33,7 +34,7 @@
 </div>
 
 <div class="container">
-    <button class="btn btn-success" onclick="Preparar()"><span class="glyphicon glyphicon-plus-sign"></span> Usuario</button>
+    <button class="btn btn-success" onclick="Preparar()" id="agregar"><span class="glyphicon glyphicon-plus"></span> Usuario</button><br /><br>
     <table class="table table-responsive table-striped table-hover">
         <thead>
             <tr>
@@ -48,12 +49,24 @@
         </tbody>
     </table>
 </div>
-
+<div id="cuadroeliminar" style="display: none;">
+    <h4>Eliminar Usuario?</h4>
+</div>
+    
 <script>
-    $(document).on("ready",function(){
-        llenarSelectRoles();
+    $(document).on("ready", function () {
         getUsuarios();
+        llenarRoles();
+        //controlarAccesos();
     })
+
+    /*function controlarAccesos() {
+        var correcto = document.getElementById("agregarUsuarios");
+        if (correcto.value == 0) {
+            var boton = document.getElementById("agregar");
+            boton.addAttribute("disabled", "true");
+        }
+    }*/ 
 
     function getUsuarios(){
         var table = $("#registros");
@@ -72,10 +85,10 @@
                     f += "<tr>";
                     f += "<td>"+v.NOMBRE+"</td>";
                     f += "<td>"+v.NOMBRE_COMPLETO+"</td>";
-                    f += "<td>" + v.ID_ROL + "</td>";
+                    f += "<td>" + v.ROL + "</td>";
                     f += "<td>" + v.ESTADO + "</td>";
                     f += "<td>";
-                    f += "<i class='glyphicon glyphicon-pencil' style='cursor:pointer' onclick='Preparar(" + v.ID_USUARIO + ")'></i>";
+                    f += "<i class='glyphicon glyphicon-pencil' style='cursor:pointer' onclick='Preparar(" + v.ID_USUARIO + ", "+v.ID_ROL+")'></i>";
                     f += "&nbsp;"
                     f += "<i class='glyphicon glyphicon-remove' style='cursor:pointer' onclick='AbrirELiminar(" + v.ID_USUARIO + ")'></i>";
                     f += "</td>";
@@ -90,7 +103,7 @@
     });
     }
 
-    function Preparar(ID) {
+    function Preparar(ID,ROL) {
         $("#usuario")[0].reset();
         var ID = ID || 0;
         $("#ID").val(ID);
@@ -99,14 +112,33 @@
                 url: "@Url.Action("GetUsuario", "Inicio")",
                 type: "post",
             dataType: "json",
-            data: { id: ID },
+            data: JSON.stringify({
+                id : ID,
+                rol : ROL
+            }),
+            contentType: 'application/json; charset=utf-8',
             beforeSend: function () {
                 dialogo("Notificación", "Espere...");
             },
             success: function (data) {
                 if (data) {
-                    $("#usuario").val(data.NOMBRE);
+                    $("#campousuario").val(data.NOMBRE);
                     $("#nombrecompleto").val(data.NOMBRE_COMPLETO);
+                    var estado = $("select#estado option");
+                    var roles = $("select#roles option");
+
+                    for (var i = 0; i < estado.length; i++) {
+                        if (estado[i].value == data.ESTADO) {
+                            estado[i].setAttribute("selected","true");
+                        }
+                    }
+
+                    for (var i = 0; i < roles.length; i++) {
+                        if (roles[i].value == data.ID_ROL) {
+                            roles[i].setAttribute("selected","true");
+                        }
+                    }
+
                     jQuery("#dialogo").dialog("close");
                     Abrir(ID);
                 }
@@ -130,7 +162,7 @@
             resizable: false,
             buttons: {
                 "Guardar": function () {
-                    Guardar();
+                    AgregarUsuario(ID);
                 },
                 "Cancelar": function () {
                     $("#usuario").dialog("close");
@@ -141,49 +173,60 @@
         });
     }
 
+    function AgregarUsuario(ID) {
+        var user = $("#campousuario").val();
+        var nocomp = $("#nombrecompleto").val();
+        var contra = $("#contrasena").val();
+        var idr = $("#roles").val();
+        var est = $("#estado").val();
 
-    function llenarSelectRoles(){
-        var selectRoles = $("#roles");
-        var e = "";
         $.ajax({
-            url : "@Url.Action("getRoles", "Inicio")",
-            type : "post",
-            dataType : "json",
-            beforeSend : function (){
-
+            url : "@Url.Action("AgregarUsuario","Inicio")",
+            type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                ide : ID,
+                usuario: user,
+                nombrecompleto: nocomp,
+                contrasena: contra,
+                idrol: idr,
+                estadoUsuario : est
+            }),
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: function () {
+                dialogo("Notificacion"," Espere...",true);
             },
-            success : function (data){
-                selectRoles.empty();
-                $.each(data,function(k,v){
-                    if(data){
-                        e += "<option value='"+v.ID_ROL+"'>";
-                        e += v.ROL;
-                        e += "</option>";
-                    }
-                });
-                selectRoles.append(e);
+            success: function (data) {
+                jQuery("#usuario").dialog("close");
+                if (data.correcto) {
+                    getUsuarios();
+                }
+                setTimeout(function () {
+                    dialogo("Notificación", data.mensaje);
+                }, 1000);
             },
-            erorr: function (x, y, z) {
-                dialogo(x.responseText);
+            error: function () {
+                dialogo("Error", "Error en la Funcion @Url.Action("AgregarUsuario", "Inicio")",true);
             }
         });
     }
 
+
+
     function AbrirELiminar(ID) {
-        $("#IDEliminar").val(ID);
-        $("#CuadroELiminar").dialog({
+        $("#usuarioeliminar").val(ID);
+        $("#cuadroeliminar").dialog({
             autoOpen: true,
             width: 650,
             title: "Eliminar Registro",
-            "position": ['middle', 100],
             modal: true,
             resizable: false,
             buttons: {
                 "Eliminar": function () {
-                    Eliminar($("#IDEliminar").val());
+                    Eliminar($("#usuarioeliminar").val());
                 },
                 "Cancelar": function () {
-                    $("#CuadroELiminar").dialog("close");
+                    $("#cuadroeliminar").dialog("close");
                 }
             },
             open: function () { },
@@ -191,29 +234,31 @@
         });
     };
 
-    function Eliminar(id) {
+    function Eliminar(ID) {
         $.ajax({
-            url: "@Url.Action("Eliminar", "Principal")",
+            url: "@Url.Action("EliminarUsuario", "Inicio")",
             type: "post",
         dataType: "json",
         data: JSON.stringify({
-            ID: id
+            id: ID
         }),
         contentType: 'application/json; charset=utf-8',
         beforeSend: function () {
-            dialogo("Notificación", "Espere...");
+            dialogo("Notificación", "Espere...",true);
         },
         success: function (data) {
-            if (data.type) {
-                GetUsuarios();
+            if (data.correcto) {
+                getUsuarios();
             }
             setTimeout(function () {
-                dialogo("Notificación", data.message);
+                jQuery("#cuadroeliminar").dialog("close");
+                dialogo("Notificación", data.mensaje);
             }, 1000);
         },
         error: function () {
-            dialogo("Error", "Error en la función @Url.Action("Guardar", "Principal")");
+            dialogo("Error", "Error en la función @Url.Action("EliminarUsuario", "Inicio")");
         }
     });
     }
+
 </script>

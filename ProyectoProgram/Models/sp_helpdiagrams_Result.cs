@@ -11,14 +11,12 @@ namespace ProyectoProgram.Models
 {
     using System;
     
-    public partial class opciones_Result
+    public partial class sp_helpdiagrams_Result
     {
-        public string OPCION { get; set; }
-        public string VISTA { get; set; }
-        public string CONTROLADOR { get; set; }
-        public Nullable<byte> ACCESO { get; set; }
-        public Nullable<byte> AGREGAR { get; set; }
-        public Nullable<byte> ELIMINAR { get; set; }
-        public Nullable<byte> MODIFICAR { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

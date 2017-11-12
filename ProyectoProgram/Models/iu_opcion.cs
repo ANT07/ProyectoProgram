@@ -22,12 +22,11 @@ namespace ProyectoProgram.Models
     
         public int ID_OPCION { get; set; }
         public string OPCION { get; set; }
-        public string URL { get; set; }
+        public string VISTA { get; set; }
         public int ID_MENU { get; set; }
-        public Nullable<int> ID_USUARIO { get; set; }
+        public string CONTROLADOR { get; set; }
     
         public virtual iu_menu iu_menu { get; set; }
-        public virtual usuario usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<iu_rol_menu> iu_rol_menu { get; set; }
     }
