@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ProyectoProgram.Models.tblcuenta>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BarraNavegacion.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CODIGOCUENTA)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NOMBRECUENTA)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MAYOR)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RESUMEN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblcuentaNivel.NUMERONIVEL)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tbltipocuenta.NOMBRETIPO)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblcuenta2.CODIGOCUENTA)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CODIGOCUENTA)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NOMBRECUENTA)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MAYOR)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RESUMEN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblcuentaNivel.NUMERONIVEL)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tbltipocuenta.NOMBRETIPO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblcuenta2.CODIGOCUENTA)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

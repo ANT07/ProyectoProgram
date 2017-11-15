@@ -181,6 +181,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CuentaNivelesController.cs" />
+    <Compile Include="Controllers\CuentasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="Controllers\OpcionController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\Rol_OpcionController.cs" />
+    <Compile Include="Controllers\TipoCuentasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -415,6 +418,21 @@
     <Content Include="Views\Rol\Rol.cshtml" />
     <Content Include="Views\Opcion\Opcion.cshtml" />
     <Content Include="Views\Rol_Opcion\Rol_Opcion.cshtml" />
+    <Content Include="Views\Cuentas\Create.cshtml" />
+    <Content Include="Views\Cuentas\Delete.cshtml" />
+    <Content Include="Views\Cuentas\Details.cshtml" />
+    <Content Include="Views\Cuentas\Edit.cshtml" />
+    <Content Include="Views\Cuentas\Index.cshtml" />
+    <Content Include="Views\CuentaNiveles\Create.cshtml" />
+    <Content Include="Views\CuentaNiveles\Delete.cshtml" />
+    <Content Include="Views\CuentaNiveles\Details.cshtml" />
+    <Content Include="Views\CuentaNiveles\Edit.cshtml" />
+    <Content Include="Views\CuentaNiveles\Index.cshtml" />
+    <Content Include="Views\TipoCuentas\Create.cshtml" />
+    <Content Include="Views\TipoCuentas\Delete.cshtml" />
+    <Content Include="Views\TipoCuentas\Details.cshtml" />
+    <Content Include="Views\TipoCuentas\Edit.cshtml" />
+    <Content Include="Views\TipoCuentas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
