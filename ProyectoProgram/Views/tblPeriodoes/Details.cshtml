@@ -1,0 +1,43 @@
+﻿@model ProyectoProgram.Models.tblPeriodo
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_BarraNavegacion.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblPeriodo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PERIODODESDE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PERIODODESDE)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PERIODOHASTA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PERIODOHASTA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NOMBREPERIODO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NOMBREPERIODO)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDPERIODO }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,27 @@
+﻿@model ProyectoProgram.Models.tbltipomovimiento
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_BarraNavegacion.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tbltipomovimiento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NOMBREMOVIMIENTO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NOMBREMOVIMIENTO)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDMOVIMIENTO }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

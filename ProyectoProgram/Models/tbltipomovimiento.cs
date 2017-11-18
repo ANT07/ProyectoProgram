@@ -12,23 +12,17 @@ namespace ProyectoProgram.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblmaestropartida
+    public partial class tbltipomovimiento
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblmaestropartida()
+        public tbltipomovimiento()
         {
-            this.tbldetallepartidas = new HashSet<tbldetallepartida>();
             this.tblmovimientoes = new HashSet<tblmovimiento>();
         }
     
-        public string IDPARTIDA { get; set; }
-        public Nullable<int> ID_USUARIO { get; set; }
-        public System.DateTime FECHACREACION { get; set; }
-        public string CONCEPTOPARTIDA { get; set; }
+        public int IDMOVIMIENTO { get; set; }
+        public string NOMBREMOVIMIENTO { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tbldetallepartida> tbldetallepartidas { get; set; }
-        public virtual usuario usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblmovimiento> tblmovimientoes { get; set; }
     }

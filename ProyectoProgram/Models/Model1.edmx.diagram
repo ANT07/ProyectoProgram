@@ -32,6 +32,16 @@
         <AssociationConnector Association="SistemaContableModel.FK_tbldetallepartida_tblcuenta" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaContableModel.FK_TBLDETAL_RELATIONS_TBLMAEST" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaContableModel.FK_tblmaestropartida_usuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SistemaContableModel.tblCierre" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="SistemaContableModel.tblmovimiento" Width="1.5" PointX="6.25" PointY="12.75" />
+        <EntityTypeShape EntityType="SistemaContableModel.tblPeriodo" Width="1.5" PointX="3" PointY="23.875" />
+        <EntityTypeShape EntityType="SistemaContableModel.tbltipomovimiento" Width="1.5" PointX="4" PointY="19.25" />
+        <EntityTypeShape EntityType="SistemaContableModel.tbltiposaldo" Width="1.5" PointX="3" PointY="26.5" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblCierre_tblcuenta" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblCierre_tblPeriodo" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblCierre_tbltiposaldo" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblmovimiento_tblmaestropartida" />
+        <AssociationConnector Association="SistemaContableModel.FK_tblmovimiento_tbltipomovimiento" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

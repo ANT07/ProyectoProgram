@@ -44,6 +44,11 @@ namespace ProyectoProgram.Models
         public virtual DbSet<VistaOpcione> VistaOpciones { get; set; }
         public virtual DbSet<VistaRole> VistaRoles { get; set; }
         public virtual DbSet<VistaUsuario> VistaUsuarios { get; set; }
+        public virtual DbSet<tblCierre> tblCierres { get; set; }
+        public virtual DbSet<tblmovimiento> tblmovimientoes { get; set; }
+        public virtual DbSet<tblPeriodo> tblPeriodoes { get; set; }
+        public virtual DbSet<tbltipomovimiento> tbltipomovimientoes { get; set; }
+        public virtual DbSet<tbltiposaldo> tbltiposaldoes { get; set; }
     
         public virtual int AgregarMenu(string menu, string icono)
         {

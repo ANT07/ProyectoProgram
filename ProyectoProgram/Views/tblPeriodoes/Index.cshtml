@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ProyectoProgram.Models.tblPeriodo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BarraNavegacion.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PERIODODESDE)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PERIODOHASTA)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NOMBREPERIODO)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PERIODODESDE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PERIODOHASTA)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NOMBREPERIODO)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IDPERIODO }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IDPERIODO }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IDPERIODO })
+        </td>
+    </tr>
+}
+
+</table>

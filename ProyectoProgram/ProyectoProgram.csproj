@@ -191,6 +191,8 @@
     <Compile Include="Controllers\OpcionController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\Rol_OpcionController.cs" />
+    <Compile Include="Controllers\tblPeriodoesController.cs" />
+    <Compile Include="Controllers\tbltipomovimientoesController.cs" />
     <Compile Include="Controllers\TipoCuentasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -246,6 +248,9 @@
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblCierre.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblcuenta.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -258,7 +263,19 @@
     <Compile Include="Models\tblmaestropartida.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblmovimiento.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblPeriodo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbltipocuenta.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbltipomovimiento.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbltiposaldo.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\usuario.cs">
@@ -433,6 +450,16 @@
     <Content Include="Views\TipoCuentas\Details.cshtml" />
     <Content Include="Views\TipoCuentas\Edit.cshtml" />
     <Content Include="Views\TipoCuentas\Index.cshtml" />
+    <Content Include="Views\tblPeriodoes\Create.cshtml" />
+    <Content Include="Views\tblPeriodoes\Delete.cshtml" />
+    <Content Include="Views\tblPeriodoes\Details.cshtml" />
+    <Content Include="Views\tblPeriodoes\Edit.cshtml" />
+    <Content Include="Views\tblPeriodoes\Index.cshtml" />
+    <Content Include="Views\tbltipomovimientoes\Create.cshtml" />
+    <Content Include="Views\tbltipomovimientoes\Delete.cshtml" />
+    <Content Include="Views\tbltipomovimientoes\Details.cshtml" />
+    <Content Include="Views\tbltipomovimientoes\Edit.cshtml" />
+    <Content Include="Views\tbltipomovimientoes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

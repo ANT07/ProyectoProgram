@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SistemaContableModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SistemaContableModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="iu_menu">
           <Key>
             <PropertyRef Name="ID_MENU" />
@@ -53,6 +53,18 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="tblCierre">
+          <Key>
+            <PropertyRef Name="IDPERIODO" />
+            <PropertyRef Name="IDNIVEL" />
+            <PropertyRef Name="NUMEROCUENTA" />
+          </Key>
+          <Property Name="IDPERIODO" Type="int" Nullable="false" />
+          <Property Name="IDTIPOSALDO" Type="int" />
+          <Property Name="IDNIVEL" Type="int" Nullable="false" />
+          <Property Name="NUMEROCUENTA" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="SALDOCIERRE" Type="float" />
+        </EntityType>
         <EntityType Name="tblcuenta">
           <Key>
             <PropertyRef Name="IDNIVEL" />
@@ -97,12 +109,47 @@
           <Property Name="FECHACREACION" Type="datetime" Nullable="false" />
           <Property Name="CONCEPTOPARTIDA" Type="varchar" MaxLength="250" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblmovimiento">
+          <Key>
+            <PropertyRef Name="IDPARTIDA" />
+            <PropertyRef Name="IDMOVIMINETO" />
+          </Key>
+          <Property Name="IDNIVEL" Type="int" />
+          <Property Name="NUMEROCUENTA" Type="varchar" MaxLength="250" />
+          <Property Name="IDPARTIDA" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IDMOVIMINETO" Type="int" Nullable="false" />
+          <Property Name="FECHA_MOVIMIENTO" Type="datetime" />
+          <Property Name="MONTO_MOVIMIENTO" Type="float" />
+        </EntityType>
+        <EntityType Name="tblPeriodo">
+          <Key>
+            <PropertyRef Name="IDPERIODO" />
+          </Key>
+          <Property Name="PERIODODESDE" Type="date" />
+          <Property Name="PERIODOHASTA" Type="date" />
+          <Property Name="NOMBREPERIODO" Type="varchar" MaxLength="250" />
+          <Property Name="IDPERIODO" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbltipocuenta">
           <Key>
             <PropertyRef Name="IDTIPO" />
           </Key>
           <Property Name="IDTIPO" Type="bigint" Nullable="false" />
           <Property Name="NOMBRETIPO" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="tbltipomovimiento">
+          <Key>
+            <PropertyRef Name="IDMOVIMIENTO" />
+          </Key>
+          <Property Name="IDMOVIMIENTO" Type="int" Nullable="false" />
+          <Property Name="NOMBREMOVIMIENTO" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="tbltiposaldo">
+          <Key>
+            <PropertyRef Name="IDTIPOSALDO" />
+          </Key>
+          <Property Name="IDTIPOSALDO" Type="int" Nullable="false" />
+          <Property Name="NOMBRESALDO" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="usuario">
           <Key>
@@ -224,6 +271,44 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblCierre_tblcuenta">
+          <End Role="tblcuenta" Type="Self.tblcuenta" Multiplicity="1" />
+          <End Role="tblCierre" Type="Self.tblCierre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblcuenta">
+              <PropertyRef Name="IDNIVEL" />
+              <PropertyRef Name="NUMEROCUENTA" />
+            </Principal>
+            <Dependent Role="tblCierre">
+              <PropertyRef Name="IDNIVEL" />
+              <PropertyRef Name="NUMEROCUENTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCierre_tblPeriodo">
+          <End Role="tblPeriodo" Type="Self.tblPeriodo" Multiplicity="1" />
+          <End Role="tblCierre" Type="Self.tblCierre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPeriodo">
+              <PropertyRef Name="IDPERIODO" />
+            </Principal>
+            <Dependent Role="tblCierre">
+              <PropertyRef Name="IDPERIODO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCierre_tbltiposaldo">
+          <End Role="tbltiposaldo" Type="Self.tbltiposaldo" Multiplicity="0..1" />
+          <End Role="tblCierre" Type="Self.tblCierre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltiposaldo">
+              <PropertyRef Name="IDTIPOSALDO" />
+            </Principal>
+            <Dependent Role="tblCierre">
+              <PropertyRef Name="IDTIPOSALDO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TBLCUENT_1_TBLCUENT">
           <End Role="tblcuentaNivel" Type="Self.tblcuentaNivel" Multiplicity="1" />
           <End Role="tblcuenta" Type="Self.tblcuenta" Multiplicity="*" />
@@ -297,6 +382,30 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             </Principal>
             <Dependent Role="tblmaestropartida">
               <PropertyRef Name="ID_USUARIO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblmovimiento_tblmaestropartida">
+          <End Role="tblmaestropartida" Type="Self.tblmaestropartida" Multiplicity="1" />
+          <End Role="tblmovimiento" Type="Self.tblmovimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblmaestropartida">
+              <PropertyRef Name="IDPARTIDA" />
+            </Principal>
+            <Dependent Role="tblmovimiento">
+              <PropertyRef Name="IDPARTIDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblmovimiento_tbltipomovimiento">
+          <End Role="tbltipomovimiento" Type="Self.tbltipomovimiento" Multiplicity="1" />
+          <End Role="tblmovimiento" Type="Self.tblmovimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltipomovimiento">
+              <PropertyRef Name="IDMOVIMIENTO" />
+            </Principal>
+            <Dependent Role="tblmovimiento">
+              <PropertyRef Name="IDMOVIMINETO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -440,11 +549,16 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
           <EntitySet Name="iu_rol" EntityType="Self.iu_rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="iu_rol_menu" EntityType="Self.iu_rol_menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCierre" EntityType="Self.tblCierre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblcuenta" EntityType="Self.tblcuenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblcuentaNivel" EntityType="Self.tblcuentaNivel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbldetallepartida" EntityType="Self.tbldetallepartida" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblmaestropartida" EntityType="Self.tblmaestropartida" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblmovimiento" EntityType="Self.tblmovimiento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPeriodo" EntityType="Self.tblPeriodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbltipocuenta" EntityType="Self.tbltipocuenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbltipomovimiento" EntityType="Self.tbltipomovimiento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbltiposaldo" EntityType="Self.tbltiposaldo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GetPrivilegios" EntityType="Self.GetPrivilegios" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -511,6 +625,18 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             <End Role="iu_rol" EntitySet="iu_rol" />
             <End Role="iu_rol_menu" EntitySet="iu_rol_menu" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblCierre_tblcuenta" Association="Self.FK_tblCierre_tblcuenta">
+            <End Role="tblcuenta" EntitySet="tblcuenta" />
+            <End Role="tblCierre" EntitySet="tblCierre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCierre_tblPeriodo" Association="Self.FK_tblCierre_tblPeriodo">
+            <End Role="tblPeriodo" EntitySet="tblPeriodo" />
+            <End Role="tblCierre" EntitySet="tblCierre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCierre_tbltiposaldo" Association="Self.FK_tblCierre_tbltiposaldo">
+            <End Role="tbltiposaldo" EntitySet="tbltiposaldo" />
+            <End Role="tblCierre" EntitySet="tblCierre" />
+          </AssociationSet>
           <AssociationSet Name="FK_TBLCUENT_1_TBLCUENT" Association="Self.FK_TBLCUENT_1_TBLCUENT">
             <End Role="tblcuentaNivel" EntitySet="tblcuentaNivel" />
             <End Role="tblcuenta" EntitySet="tblcuenta" />
@@ -535,13 +661,20 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             <End Role="usuario" EntitySet="usuario" />
             <End Role="tblmaestropartida" EntitySet="tblmaestropartida" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblmovimiento_tblmaestropartida" Association="Self.FK_tblmovimiento_tblmaestropartida">
+            <End Role="tblmaestropartida" EntitySet="tblmaestropartida" />
+            <End Role="tblmovimiento" EntitySet="tblmovimiento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblmovimiento_tbltipomovimiento" Association="Self.FK_tblmovimiento_tbltipomovimiento">
+            <End Role="tbltipomovimiento" EntitySet="tbltipomovimiento" />
+            <End Role="tblmovimiento" EntitySet="tblmovimiento" />
+          </AssociationSet>
           <AssociationSet Name="FK_usuario_iu_rol" Association="Self.FK_usuario_iu_rol">
             <End Role="iu_rol" EntitySet="iu_rol" />
             <End Role="usuario" EntitySet="usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SistemaContableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -619,6 +752,7 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
           <NavigationProperty Name="tblcuenta1" Relationship="Self.FK_tblcuenta_tblcuenta" FromRole="tblcuenta" ToRole="tblcuenta1" />
           <NavigationProperty Name="tblcuenta2" Relationship="Self.FK_tblcuenta_tblcuenta" FromRole="tblcuenta1" ToRole="tblcuenta" />
           <NavigationProperty Name="tbldetallepartidas" Relationship="Self.FK_tbldetallepartida_tblcuenta" FromRole="tblcuenta" ToRole="tbldetallepartida" />
+          <NavigationProperty Name="tblCierres" Relationship="SistemaContableModel.FK_tblCierre_tblcuenta" FromRole="tblcuenta" ToRole="tblCierre" />
         </EntityType>
         <EntityType Name="tblcuentaNivel">
           <Key>
@@ -653,6 +787,7 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
           <Property Name="CONCEPTOPARTIDA" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="tbldetallepartidas" Relationship="Self.FK_TBLDETAL_RELATIONS_TBLMAEST" FromRole="tblmaestropartida" ToRole="tbldetallepartida" />
           <NavigationProperty Name="usuario" Relationship="Self.FK_tblmaestropartida_usuario" FromRole="tblmaestropartida" ToRole="usuario" />
+          <NavigationProperty Name="tblmovimientoes" Relationship="SistemaContableModel.FK_tblmovimiento_tblmaestropartida" FromRole="tblmaestropartida" ToRole="tblmovimiento" />
         </EntityType>
         <EntityType Name="tbltipocuenta">
           <Key>
@@ -934,7 +1069,7 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             <Parameter Name="acceder" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AgregarRol">
-            <Parameter Name="rol" Mode="In" Type="String" />
+          <Parameter Name="rol" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AgregarUsuario">
             <Parameter Name="usuario" Mode="In" Type="String" />
@@ -973,23 +1108,23 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             <Parameter Name="iduser" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EliminarMenu">
-            <Parameter Name="idemenu" Mode="In" Type="Int32" />
+          <Parameter Name="idemenu" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EliminarOpcion">
-            <Parameter Name="id_opcion" Mode="In" Type="Int32" />
+          <Parameter Name="id_opcion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EliminarPrivilegio">
             <Parameter Name="opcion" Mode="In" Type="Int32" />
             <Parameter Name="rol" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EliminarRol">
-            <Parameter Name="id_rol" Mode="In" Type="Int32" />
+          <Parameter Name="id_rol" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EliminarUsuario">
-            <Parameter Name="id_usuario" Mode="In" Type="Int32" />
+          <Parameter Name="id_usuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetOpcion" ReturnType="Collection(SistemaContableModel.GetOpcion_Result)">
-            <Parameter Name="idopcion" Mode="In" Type="Int32" />
+          <Parameter Name="idopcion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ingresoUsuario" ReturnType="Collection(SistemaContableModel.ingresoUsuario_Result)">
             <Parameter Name="USUARIO" Mode="In" Type="String" />
@@ -1036,6 +1171,31 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="tblCierres" EntityType="SistemaContableModel.tblCierre" />
+          <EntitySet Name="tblmovimientoes" EntityType="SistemaContableModel.tblmovimiento" />
+          <EntitySet Name="tblPeriodoes" EntityType="SistemaContableModel.tblPeriodo" />
+          <EntitySet Name="tbltipomovimientoes" EntityType="SistemaContableModel.tbltipomovimiento" />
+          <EntitySet Name="tbltiposaldoes" EntityType="SistemaContableModel.tbltiposaldo" />
+          <AssociationSet Name="FK_tblCierre_tblcuenta" Association="SistemaContableModel.FK_tblCierre_tblcuenta">
+            <End Role="tblcuenta" EntitySet="tblcuentas" />
+            <End Role="tblCierre" EntitySet="tblCierres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCierre_tblPeriodo" Association="SistemaContableModel.FK_tblCierre_tblPeriodo">
+            <End Role="tblPeriodo" EntitySet="tblPeriodoes" />
+            <End Role="tblCierre" EntitySet="tblCierres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCierre_tbltiposaldo" Association="SistemaContableModel.FK_tblCierre_tbltiposaldo">
+            <End Role="tbltiposaldo" EntitySet="tbltiposaldoes" />
+            <End Role="tblCierre" EntitySet="tblCierres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblmovimiento_tblmaestropartida" Association="SistemaContableModel.FK_tblmovimiento_tblmaestropartida">
+            <End Role="tblmaestropartida" EntitySet="tblmaestropartidas" />
+            <End Role="tblmovimiento" EntitySet="tblmovimientoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblmovimiento_tbltipomovimiento" Association="SistemaContableModel.FK_tblmovimiento_tbltipomovimiento">
+            <End Role="tbltipomovimiento" EntitySet="tbltipomovimientoes" />
+            <End Role="tblmovimiento" EntitySet="tblmovimientoes" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetOpcion_Result">
           <Property Type="Int32" Name="ID_OPCION" Nullable="false" />
@@ -1073,6 +1233,123 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="tblCierre">
+          <Key>
+            <PropertyRef Name="IDPERIODO" />
+            <PropertyRef Name="IDNIVEL" />
+            <PropertyRef Name="NUMEROCUENTA" />
+          </Key>
+          <Property Name="IDPERIODO" Type="Int32" Nullable="false" />
+          <Property Name="IDTIPOSALDO" Type="Int32" />
+          <Property Name="IDNIVEL" Type="Int32" Nullable="false" />
+          <Property Name="NUMEROCUENTA" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="SALDOCIERRE" Type="Double" />
+          <NavigationProperty Name="tblcuenta" Relationship="SistemaContableModel.FK_tblCierre_tblcuenta" FromRole="tblCierre" ToRole="tblcuenta" />
+          <NavigationProperty Name="tblPeriodo" Relationship="SistemaContableModel.FK_tblCierre_tblPeriodo" FromRole="tblCierre" ToRole="tblPeriodo" />
+          <NavigationProperty Name="tbltiposaldo" Relationship="SistemaContableModel.FK_tblCierre_tbltiposaldo" FromRole="tblCierre" ToRole="tbltiposaldo" />
+        </EntityType>
+        <EntityType Name="tblmovimiento">
+          <Key>
+            <PropertyRef Name="IDPARTIDA" />
+            <PropertyRef Name="IDMOVIMINETO" />
+          </Key>
+          <Property Name="IDNIVEL" Type="Int32" />
+          <Property Name="NUMEROCUENTA" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IDPARTIDA" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IDMOVIMINETO" Type="Int32" Nullable="false" />
+          <Property Name="FECHA_MOVIMIENTO" Type="DateTime" Precision="3" />
+          <Property Name="MONTO_MOVIMIENTO" Type="Double" />
+          <NavigationProperty Name="tblmaestropartida" Relationship="SistemaContableModel.FK_tblmovimiento_tblmaestropartida" FromRole="tblmovimiento" ToRole="tblmaestropartida" />
+          <NavigationProperty Name="tbltipomovimiento" Relationship="SistemaContableModel.FK_tblmovimiento_tbltipomovimiento" FromRole="tblmovimiento" ToRole="tbltipomovimiento" />
+        </EntityType>
+        <EntityType Name="tblPeriodo">
+          <Key>
+            <PropertyRef Name="IDPERIODO" />
+          </Key>
+          <Property Name="PERIODODESDE" Type="DateTime" Precision="0" />
+          <Property Name="PERIODOHASTA" Type="DateTime" Precision="0" />
+          <Property Name="NOMBREPERIODO" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IDPERIODO" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblCierres" Relationship="SistemaContableModel.FK_tblCierre_tblPeriodo" FromRole="tblPeriodo" ToRole="tblCierre" />
+        </EntityType>
+        <EntityType Name="tbltipomovimiento">
+          <Key>
+            <PropertyRef Name="IDMOVIMIENTO" />
+          </Key>
+          <Property Name="IDMOVIMIENTO" Type="Int32" Nullable="false" />
+          <Property Name="NOMBREMOVIMIENTO" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblmovimientoes" Relationship="SistemaContableModel.FK_tblmovimiento_tbltipomovimiento" FromRole="tbltipomovimiento" ToRole="tblmovimiento" />
+        </EntityType>
+        <EntityType Name="tbltiposaldo">
+          <Key>
+            <PropertyRef Name="IDTIPOSALDO" />
+          </Key>
+          <Property Name="IDTIPOSALDO" Type="Int32" Nullable="false" />
+          <Property Name="NOMBRESALDO" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblCierres" Relationship="SistemaContableModel.FK_tblCierre_tbltiposaldo" FromRole="tbltiposaldo" ToRole="tblCierre" />
+        </EntityType>
+        <Association Name="FK_tblCierre_tblcuenta">
+          <End Type="SistemaContableModel.tblcuenta" Role="tblcuenta" Multiplicity="1" />
+          <End Type="SistemaContableModel.tblCierre" Role="tblCierre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblcuenta">
+              <PropertyRef Name="IDNIVEL" />
+              <PropertyRef Name="NUMEROCUENTA" />
+            </Principal>
+            <Dependent Role="tblCierre">
+              <PropertyRef Name="IDNIVEL" />
+              <PropertyRef Name="NUMEROCUENTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCierre_tblPeriodo">
+          <End Type="SistemaContableModel.tblPeriodo" Role="tblPeriodo" Multiplicity="1" />
+          <End Type="SistemaContableModel.tblCierre" Role="tblCierre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPeriodo">
+              <PropertyRef Name="IDPERIODO" />
+            </Principal>
+            <Dependent Role="tblCierre">
+              <PropertyRef Name="IDPERIODO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCierre_tbltiposaldo">
+          <End Type="SistemaContableModel.tbltiposaldo" Role="tbltiposaldo" Multiplicity="0..1" />
+          <End Type="SistemaContableModel.tblCierre" Role="tblCierre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltiposaldo">
+              <PropertyRef Name="IDTIPOSALDO" />
+            </Principal>
+            <Dependent Role="tblCierre">
+              <PropertyRef Name="IDTIPOSALDO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblmovimiento_tblmaestropartida">
+          <End Type="SistemaContableModel.tblmaestropartida" Role="tblmaestropartida" Multiplicity="1" />
+          <End Type="SistemaContableModel.tblmovimiento" Role="tblmovimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblmaestropartida">
+              <PropertyRef Name="IDPARTIDA" />
+            </Principal>
+            <Dependent Role="tblmovimiento">
+              <PropertyRef Name="IDPARTIDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblmovimiento_tbltipomovimiento">
+          <End Type="SistemaContableModel.tbltipomovimiento" Role="tbltipomovimiento" Multiplicity="1" />
+          <End Type="SistemaContableModel.tblmovimiento" Role="tblmovimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltipomovimiento">
+              <PropertyRef Name="IDMOVIMIENTO" />
+            </Principal>
+            <Dependent Role="tblmovimiento">
+              <PropertyRef Name="IDMOVIMINETO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1340,6 +1617,55 @@ advertencia 6002: La tabla o vista 'SistemaContable.dbo.VistaUsuarios' no tiene 
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SistemaContableModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SistemaContableModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="tblCierres">
+            <EntityTypeMapping TypeName="SistemaContableModel.tblCierre">
+              <MappingFragment StoreEntitySet="tblCierre">
+                <ScalarProperty Name="SALDOCIERRE" ColumnName="SALDOCIERRE" />
+                <ScalarProperty Name="NUMEROCUENTA" ColumnName="NUMEROCUENTA" />
+                <ScalarProperty Name="IDNIVEL" ColumnName="IDNIVEL" />
+                <ScalarProperty Name="IDTIPOSALDO" ColumnName="IDTIPOSALDO" />
+                <ScalarProperty Name="IDPERIODO" ColumnName="IDPERIODO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblmovimientoes">
+            <EntityTypeMapping TypeName="SistemaContableModel.tblmovimiento">
+              <MappingFragment StoreEntitySet="tblmovimiento">
+                <ScalarProperty Name="MONTO_MOVIMIENTO" ColumnName="MONTO_MOVIMIENTO" />
+                <ScalarProperty Name="FECHA_MOVIMIENTO" ColumnName="FECHA_MOVIMIENTO" />
+                <ScalarProperty Name="IDMOVIMINETO" ColumnName="IDMOVIMINETO" />
+                <ScalarProperty Name="IDPARTIDA" ColumnName="IDPARTIDA" />
+                <ScalarProperty Name="NUMEROCUENTA" ColumnName="NUMEROCUENTA" />
+                <ScalarProperty Name="IDNIVEL" ColumnName="IDNIVEL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPeriodoes">
+            <EntityTypeMapping TypeName="SistemaContableModel.tblPeriodo">
+              <MappingFragment StoreEntitySet="tblPeriodo">
+                <ScalarProperty Name="IDPERIODO" ColumnName="IDPERIODO" />
+                <ScalarProperty Name="NOMBREPERIODO" ColumnName="NOMBREPERIODO" />
+                <ScalarProperty Name="PERIODOHASTA" ColumnName="PERIODOHASTA" />
+                <ScalarProperty Name="PERIODODESDE" ColumnName="PERIODODESDE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbltipomovimientoes">
+            <EntityTypeMapping TypeName="SistemaContableModel.tbltipomovimiento">
+              <MappingFragment StoreEntitySet="tbltipomovimiento">
+                <ScalarProperty Name="NOMBREMOVIMIENTO" ColumnName="NOMBREMOVIMIENTO" />
+                <ScalarProperty Name="IDMOVIMIENTO" ColumnName="IDMOVIMIENTO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbltiposaldoes">
+            <EntityTypeMapping TypeName="SistemaContableModel.tbltiposaldo">
+              <MappingFragment StoreEntitySet="tbltiposaldo">
+                <ScalarProperty Name="NOMBRESALDO" ColumnName="NOMBRESALDO" />
+                <ScalarProperty Name="IDTIPOSALDO" ColumnName="IDTIPOSALDO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

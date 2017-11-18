@@ -19,6 +19,7 @@ namespace ProyectoProgram.Models
         {
             this.tblcuenta1 = new HashSet<tblcuenta>();
             this.tbldetallepartidas = new HashSet<tbldetallepartida>();
+            this.tblCierres = new HashSet<tblCierre>();
         }
     
         public string CODIGOCUENTA { get; set; }
@@ -38,5 +39,7 @@ namespace ProyectoProgram.Models
         public virtual tblcuenta tblcuenta2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbldetallepartida> tbldetallepartidas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblCierre> tblCierres { get; set; }
     }
 }
